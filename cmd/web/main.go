@@ -7,7 +7,7 @@ import (
 
 func main() {
 	mux := http.NewServeMux()
-	// Registrando as rotas e linkando elas com as minhas funcs (controllers) acima
+	// Registrando as rotas e linkando elas com meus handlers (controllers)
 	mux.HandleFunc("/", home)
 	mux.HandleFunc("/snippet/view", snippetView)
 	mux.HandleFunc("/snippet/create", snippetCreate)
