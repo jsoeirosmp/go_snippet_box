@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"html/template"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -15,7 +17,29 @@ func home(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
-	w.Write([]byte("Hello from J`s Snippetbox!"))
+	files := []string{
+		"./ui/html/pages/base.tmpl",
+		"./ui/html/pages/home.tmpl",
+		"./ui/html/partials/nav.tmpl",
+	}
+	// Usando template.ParseFile() pra ler o arquivo de template, se tiver erro, logo
+	// com http.Error() pra enviar um 500 internal server error generico
+	// Uso o ... pra passar o conteudo do slice de files acima como argumentos que variam
+	ts, err := template.ParseFiles(files...)
+	if err != nil {
+		log.Print(err.Error())
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	// Depois, uso o metodo ExecuteTemplate() no template pra escrever o conteudo dele como corpo da
+	// resposta. O ultimo parametro do metodo representa dados dinamicos que posso querer
+	// passar, por enquanto deixo nil
+	err = ts.ExecuteTemplate(w, "base", nil)
+	if err != nil {
+		log.Print(err.Error())
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+	}
 }
 
 // Adicionando func com handler pra visualizar apenas uma anotacao
