@@ -28,9 +28,8 @@ func snippetCreate(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		// Informando ao user o tipo de metodo permitido, primeiro param é o nome do header e segundo o método
 		w.Header().Set("Allow", "POST")
-		// Se nao estiver, retorno um 405 com a mensagem abaixo. Retorna a func pro codigo a seguir nao ser executado
-		w.WriteHeader(405)
-		w.Write([]byte("Method not allowed."))
+		// Se nao estiver, retorno um 405 usando http.Error()
+		http.Error(w, "Method Not Allowed", 405)
 		return
 	}
 	w.Write([]byte("Create new Snippet"))
