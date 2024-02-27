@@ -25,11 +25,11 @@ func snippetView(w http.ResponseWriter, r *http.Request) {
 // Adicionando func com handler pra criar uma anotacao
 func snippetCreate(w http.ResponseWriter, r *http.Request) {
 	// Usando r.method pra checar se a request esta usando o metodo que eu quero
-	if r.Method != "POST" {
+	if r.Method != http.MethodPost {
 		// Informando ao user o tipo de metodo permitido, primeiro param é o nome do header e segundo o método
-		w.Header().Set("Allow", "POST")
-		// Se nao estiver, retorno um 405 usando http.Error()
-		http.Error(w, "Method Not Allowed", 405)
+		w.Header().Set("Allow", http.MethodPost)
+		// Se nao estiver, retorno um 405 usando http.StatusMethodNotAllowed
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 		return
 	}
 	w.Write([]byte("Create new Snippet"))
